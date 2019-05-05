@@ -4,12 +4,16 @@
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
     </feature>
-    <name>HelloCordova</name>
+    <feature name="CDVOrientation">
+        <param name="android-package" value="cordova.plugins.screenorientation.CDVOrientation" />
+    </feature>
+    <icon src="./www/img/FB_OrangeMusique.jpg" />
+    <name>Mon MP3 Player</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        A sample mp3 player writen with cordova.
     </description>
     <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+        Kalso
     </author>
     <content src="index.html" />
     <access origin="*" />

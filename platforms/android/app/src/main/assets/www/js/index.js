@@ -32,18 +32,18 @@ var app = {
 
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        /* const buttons = document.getElementsByTagName('input');
-        Array.from(buttons).forEach( input => {
-            
-        }); */
-        /* document.addEventListener('click', clickHandler);
+        /*let screenOrient = screen.orientation.type.split('-')[0];
 
-        function clickHandler(e) {
-            if (e.target.tagName === 'INPUT') {
-                e.target.style.width = '7rem';
+        window.addEventListener("orientationchange", function(){
+            const newScreenOrient = screen.orientation.type.split('-')[0];
+            if (newScreenOrient !== screenOrient) {
+                document.getElementById('imgAlbum').classList.toggle('imgLandscape');
+                screenOrient = newScreenOrient;
             }
-        } */
+        });*/
+        
     }
+
 };
 
 app.initialize();

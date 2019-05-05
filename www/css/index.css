@@ -16,10 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-* {
+
+*,
+:after, 
+:before {
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
     outline: inherit;
+}
+
+html {
+    font-size: 62.5%;
 }
 
 body {
@@ -29,17 +38,18 @@ body {
     /*background-color:#E4E4E4;*/
     /*background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);*/
     font-family: system-ui, -apple-system, -apple-system-font, 'Segoe UI', 'Roboto', sans-serif;
-    font-size:12px;
     height:100vh;
-    margin:0px;
-    padding:0px;
+    
     /* Padding to avoid the "unsafe" areas behind notches in the screen */
     padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-right, 0px);
-    text-transform:uppercase;
     width:100%;
-    font-size: 62.5%;
     outline: none;
+    -webkit-font-smoothing: antialiased;    /* smooth out the font AND svg icons !!! */
 }
+
+/* Debut MON CSS */
+/* For desktop */
+
 
 .content {
     overflow: auto;
@@ -72,8 +82,9 @@ body {
     filter: blur(5px);
 }
 
-h1 {
-    font-size:24px;
+/* For Mobile */
+
+/* h1 {
     font-weight:normal;
     margin:0px;
     overflow:visible;
@@ -81,63 +92,288 @@ h1 {
     text-align:center;
     text-transform: uppercase;
 }
-
-/* MON CSS */
+ */
 
 .player {
-    padding: 1rem;
-}
-
-.top {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: #12161d;
 }
 
-.buttons {
+.player-top {
+}
+
+
+.playlist-container {
+    width: 100%;
     display: flex;
-    justify-content: space-between;
-    padding: 4rem .4rem;
-}
-
-.buttons input {
-    width: 3rem;
-    height: 3rem;
-}
-
-.buttons input:active {
-    animation: pulse .4s ease-in;
-    -webkit-animation: pulse .4s ease-in;
-}
-
-.buttons input[src="./img/play2.svg"] {
-    width: 5rem;
-    height: 5rem;
-}
-
-select {
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    margin: .4rem;
+    height: 4.8rem;
+    font-size: 1.6rem;
+    color: #fff;
+    background-color: #12161d;
+    position: absolute;
+    top: 0;
+}
+
+.img-container {
+    height: 34.8rem;
+    width: 100%;
+}
+
+.img-container img {
+    display: block;
+    max-width: 100%;
+    object-fit: contain;
+    margin-top: 4.8rem;
+}
+
+.player-bottom {
+    display: flex;
+    flex-direction: column;
+}
+
+#song-played-progress {
+    display: block;
+    height: .35rem;
+    width: 100%;
+    background-color: #fff;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+}
+
+::-webkit-progress-bar {
+    background-color: #000;
+}
+
+::-webkit-progress-value {
+    background-color: #fff;
+}
+
+::-webkit-progress-inner-element {
+
+}
+
+.song-info {
+    background-color: #000;
+    color: #fff;
+    width: 100vw;
+    height: 7.4rem;
+    display: flex;
+    flex-direction: column;
 }
 
 #duree {
-    padding: .4rem;
-    font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+    padding: .4rem 1.2rem 0rem 1.2rem;
+    font-size: 1.4rem;
+    background-color: #000;
 }
 
-img {
-    width: 60%;
-    padding: 1.6rem 0;
+.title,
+.album {
+    text-align: center;
+    font-size: 1.6rem;
+}
+
+.album {
+    color: #625c5c;
+    padding: .3rem 1rem 1rem 1rem;
+    font-size: 1.4rem;
+    background-color: #000;
+}
+
+.player-control {
+    background-color: #192029;
+    padding: 0 2.5rem;
+    height: 14.7rem;
+}
+
+.control-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 2.4rem 0;
+}
+
+.control-container div {
+    cursor: pointer;
+    margin: auto;
+}
+
+.control-container #shuffle,
+.control-container #repeat {
+    opacity: .7;
+}
+
+.control-container #shuffle {
+    background: url(../img/shuffle.svg);
+    width: 1.5rem;
+    margin-left: 2%;
+    height: 1.7rem;
+}
+
+.control-container #previous,
+.control-container #next {
+    width: 2.4rem;
+    height: 2.4rem;
+}
+
+.control-container #previous {
+    background: url(../img/previous.svg);
+}
+
+.control-container #play {
+    background: url(../img/play.svg);
+    width: 7rem;
+    height: 7rem;
+    margin: 0 3%;
+}
+
+.control-container #next {
+    background: url(../img/next.svg);
+}
+
+.control-container #repeat {
+    background: url(../img/repeat.svg);
+    width: 1.8rem;
+    height: 2rem;
+    margin-right: 2%;
+}
+
+.volume-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.volume-container img {
+    width: 1.8rem;
+    height: 1.8rem;
+}
+
+/** This gives us invisible or unstyled range inputs in all browsers. Now we can apply our custom styles. **/
+
+input[type=range] {
+    -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+    width: 100%; /* Specific width is required for Firefox. */
+    background: transparent; /* Otherwise white in Chrome */
+    margin-left: 1rem;
+}
+  
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+}
+  
+input[type=range]:focus {
+    outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+  
+input[type=range]::-ms-track {
+    width: 100%;
+    cursor: pointer;
+  
+    /* Hides the slider so custom styles can be added */
+    background: transparent; 
+    border-color: transparent;
+    color: transparent;
+}
+
+/** Styling the Thumb **/
+
+/* Special styling for WebKit/Blink */
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    /* border: 1px solid #000000; */
+    height: 1.8rem;
+    width: 1.8rem;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+    margin-top: -.8rem; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+    /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */ /* Add cool effects to your sliders! */
+}
+  
+/* All the same stuff for Firefox */
+input[type=range]::-moz-range-thumb {
+    /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
+    /* border: 1px solid #000000; */
+    height: 1.8rem;
+    width: 1.8rem;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+}
+  
+/* All the same stuff for IE */
+input[type=range]::-ms-thumb {
+    /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
+    /* border: 1px solid #000000; */
+    height: 1.8rem;
+    width: 1.8rem;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+/** Styling the Track **/
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 2px;
+    cursor: pointer;
+    /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
+    background: #fff;
+}
+  
+input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #fff;
+}
+  
+input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 2px;
+    cursor: pointer;
+    /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
+    background: #fff;
+}
+  
+input[type=range]::-ms-track {
+    width: 100%;
+    height: 2px;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    /* border-width: 16px 0; */
+    color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+    background: #fff;
+    /* border-radius: 2.6px; */
+    /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
+}
+input[type=range]:focus::-ms-fill-lower {
+    background: #fff;
+}
+input[type=range]::-ms-fill-upper {
+    background: #fff;
+    /* border-radius: 2.6px; */
+    /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
+}
+input[type=range]:focus::-ms-fill-upper {
+    background: #fff;
 }
 
 /* Fin MON CSS */
-
-@keyframes pulse {
-    from { transform: scale(1)}
-    50% { transform: scale(1.2); }
-    to { transform: scale(1) }
-}
 
 @keyframes fade {
     from { opacity: 1.0; }
@@ -163,5 +399,57 @@ img {
         padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
         margin:-90px 0px 0px -198px;  /* offset vertical: half of image height */
                                       /* offset horizontal: half of image width and text area width */
+    }
+
+    .player {
+        flex-direction: row;
+        height: 100.1%; /* Fix to the thin white gap at the bottom of the screen */ 
+    }
+
+    .player-top {
+        width: 50%;
+    }
+
+    .player-bottom {
+        width: 50%;
+        height: 100%;
+    }
+
+    .song-info {
+        width: auto;
+    }
+
+    .title-album-container {
+        order: 1;
+        flex: 1 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    #player-progress-bar-container {
+        order: 2;
+    }
+
+    #duree {
+        order: 3;
+    }
+
+    .playlist-container {
+        position: static;
+    }
+
+    .img-container img {
+        margin-top: 0;
+        height: 100%;
+    }
+
+    .song-info {
+        height: unset;
+        flex: 1 1;
+    }
+
+    .album {
+        padding-top: 4%;
     }
 }
