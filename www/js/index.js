@@ -67,11 +67,7 @@ var app = {
         
         
         // EVENTS
-        playBtn.addEventListener('click', () => {
-            console.log('click');
-             
-            playAudio("/android_asset/www/audio/Jasmin.mp3") 
-        });
+        playBtn.addEventListener('click', () => { playAudio(src) });
 
         function listDir(path) {
             window.resolveLocalFileSystemURL(
