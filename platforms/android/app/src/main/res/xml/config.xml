@@ -7,6 +7,14 @@
     <feature name="CDVOrientation">
         <param name="android-package" value="cordova.plugins.screenorientation.CDVOrientation" />
     </feature>
+    <feature name="File">
+        <param name="android-package" value="org.apache.cordova.file.FileUtils" />
+        <param name="onload" value="true" />
+    </feature>
+    <allow-navigation href="cdvfile:*" />
+    <feature name="Media">
+        <param name="android-package" value="org.apache.cordova.media.AudioHandler" />
+    </feature>
     <icon src="./www/img/FB_OrangeMusique.jpg" />
     <name>Mon MP3 Player</name>
     <description>

@@ -19,7 +19,11 @@
 var app = {
     // Application Constructor
     initialize: function() {
-        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+        document.addEventListener(
+            "deviceready",
+            this.onDeviceReady.bind(this),
+            false
+        );
     },
 
     // deviceready Event Handler
@@ -27,23 +31,121 @@ var app = {
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
-        this.receivedEvent('deviceready');
+        this.receivedEvent("deviceready");
     },
+
+
+
+
+
+
+
+
+
+
 
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        /*let screenOrient = screen.orientation.type.split('-')[0];
-
-        window.addEventListener("orientationchange", function(){
-            const newScreenOrient = screen.orientation.type.split('-')[0];
-            if (newScreenOrient !== screenOrient) {
-                document.getElementById('imgAlbum').classList.toggle('imgLandscape');
-                screenOrient = newScreenOrient;
-            }
-        });*/
+        // BUTTONS
+        const playBtn = document.getElementById('play');
+        const shuffleBtn = document.getElementById('shuffle');
+        const previousBtn = document.getElementById('previous');
+        const nextBtn = document.getElementById('next');
+        const repeatBtn = document.getElementById('repeat');
+        //const pauseBtn = document.getElementById('pause');
         
-    }
 
+        // VARIABLES
+        const optionItem = {
+            text: "Jasmin"
+        };
+        
+        
+        //console.log("playAudio" + src);
+
+        const src = "/android_asset/www/audio/" + optionItem.text + ".mp3";
+        
+        
+        // EVENTS
+        playBtn.addEventListener('click', playAudio(src));
+        playBtn.addEventListener('touch', playAudio(src));
+
+        /*         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+
+            console.log('file system open: ' + fs.name);
+            fs.root.getFile("newPersistentFile.txt", { create: true, exclusive: false }, function (fileEntry) {
+        
+                console.log("fileEntry is file?" + fileEntry.isFile.toString());
+                fileEntry.name == 'Jasmin.mp3'
+                fileEntry.fullPath == '/home/ubuntu/dev/cordova/myMP3/platforms/android/app/src/main/assets/www/audio/Jasmin.mp3'
+                writeFile(fileEntry, null);
+        
+            }, onErrorCreateFile);
+        
+        }, onErrorLoadFs);
+        
+
+        function readFile(fileEntry) {
+
+            fileEntry.file(function (file) {
+                var reader = new FileReader();
+        
+                reader.onloadend = function() {
+                    console.log("Successful file read: " + this.result);
+                    displayFileData(fileEntry.fullPath + ": " + this.result);
+                };
+        
+                reader.readAsText(file);
+        
+            }, onErrorReadFile);
+        }
+        
+        console.log(window.requestFileSystem(readFile()));
+ */
+
+        function listDir(path) {
+            window.resolveLocalFileSystemURL(
+                path,
+                function(fileSystem) {
+                    var reader = fileSystem.createReader();
+                    reader.readEntries(
+                        function(entries) {
+                            console.log(entries);
+                        },
+                        function(err) {
+                            console.log(err);
+                        }
+                    );
+                },
+                function(err) {
+                    console.log(err);
+                }
+            );
+        }
+        //example: list of www/audio/ folder in cordova/ionic app.
+        console.log(listDir(cordova.file.applicationDirectory + "www/audio/"));
+
+
+
+        // Play audio
+        //
+        function playAudio(url) {
+            // Play the audio file at url
+            var my_media = new Media(
+                url,
+                // success callback
+                function() {
+                    console.log("playAudio():Audio Success");
+                },
+                // error callback
+                function(err) {
+                    console.log("playAudio():Audio Error: " + err);
+                }
+            );
+            // Play audio
+            my_media.play();
+        }
+    }
 };
 
 app.initialize();

@@ -35,8 +35,6 @@ body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
     -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
-    /*background-color:#E4E4E4;*/
-    /*background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);*/
     font-family: system-ui, -apple-system, -apple-system-font, 'Segoe UI', 'Roboto', sans-serif;
     height:100vh;
     
@@ -46,53 +44,6 @@ body {
     outline: none;
     -webkit-font-smoothing: antialiased;    /* smooth out the font AND svg icons !!! */
 }
-
-/* Debut MON CSS */
-/* For desktop */
-
-
-.content {
-    overflow: auto;
-    position: relative;
-}
-
-.content:before {
-    content: "";
-    position: fixed;
-    top: -5%;
-    left: -5%;
-    z-index: -1;
-  
-    display: block;
-    /*background-image: linear-gradient(
-        rgba(0, 0, 0, 0.6),
-        rgba(0, 0, 0, 0.4)), 
-        url("../img/spencer-davis-1533781-unsplash.jpg");*/
-    background-image: url("../img/spencer-davis-1533781-unsplash.jpg");
-    background-size:cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 110%;
-    height: 110%;
-  
-    -webkit-filter: blur(5px);
-    -moz-filter: blur(5px);
-    -o-filter: blur(5px);
-    -ms-filter: blur(5px);
-    filter: blur(5px);
-}
-
-/* For Mobile */
-
-/* h1 {
-    font-weight:normal;
-    margin:0px;
-    overflow:visible;
-    padding:0px;
-    text-align:center;
-    text-transform: uppercase;
-}
- */
 
 .player {
     height: 100vh;
@@ -106,6 +57,7 @@ body {
 }
 
 .player-top {
+
 }
 
 
@@ -394,13 +346,6 @@ input[type=range]:focus::-ms-fill-upper {
 
 /* Landscape layout (with min-width) */
 @media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
-    .app {
-        background-position:left center;
-        padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
-        margin:-90px 0px 0px -198px;  /* offset vertical: half of image height */
-                                      /* offset horizontal: half of image width and text area width */
-    }
-
     .player {
         flex-direction: row;
         height: 100.1%; /* Fix to the thin white gap at the bottom of the screen */ 
