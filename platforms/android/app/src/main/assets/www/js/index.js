@@ -34,40 +34,60 @@ var app = {
         this.receivedEvent("deviceready");
     },
 
-
-
-
-
-
-
-
-
-
-
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         // BUTTONS
-        const playBtn = document.getElementById('play');
-        const shuffleBtn = document.getElementById('shuffle');
-        const previousBtn = document.getElementById('previous');
-        const nextBtn = document.getElementById('next');
-        const repeatBtn = document.getElementById('repeat');
+        const playBtn = document.getElementById("play");
+        const shuffleBtn = document.getElementById("shuffle");
+        const previousBtn = document.getElementById("previous");
+        const nextBtn = document.getElementById("next");
+        const repeatBtn = document.getElementById("repeat");
         //const pauseBtn = document.getElementById('pause');
-        
 
         // VARIABLES
         const optionItem = {
             text: "Jasmin"
         };
-        
-        
-        //console.log("playAudio" + src);
+        my_media = undefined;
 
-        const src = "/android_asset/www/audio/" + optionItem.text + ".mp3";
-        
-        
+        //const src = "/android_asset/www/audio/" + optionItem.text + ".mp3";
+        const src = "/android_asset/www/audio/Joe Satriani - Made of Tears.mp4";
+        //const src = "/www/audio/Joe Satriani - Made of Tears.mp4";
+
         // EVENTS
-        playBtn.addEventListener('click', () => { playAudio(src) });
+        playBtn.addEventListener("click", playPause);
+
+        function playPause(e) {
+            console.log('my-media', my_media);
+            
+            if (!my_media) { 
+                my_media = createMedia(src); 
+            };
+
+            if (!this.classList.contains("playing") && my_media) {
+                my_media.play();
+                this.classList.toggle("playing");
+            } else if (this.classList.contains("playing") && my_media) {
+                my_media.pause();
+                this.classList.toggle("playing");
+            }
+        }
+
+        function createMedia(url) {
+            // Create the media file at url
+            let my_media = new Media(
+                url,
+                // success callback
+                function() {
+                    console.log("playAudio():Audio Success");
+                },
+                // error callback
+                function(err) {
+                    console.log("playAudio():Audio Error: " + err);
+                }
+            );
+            return my_media;
+        }
 
         function listDir(path) {
             window.resolveLocalFileSystemURL(
@@ -81,38 +101,20 @@ var app = {
                         function(err) {
                             console.log(err);
                         }
-                        );
-                    },
-                    function(err) {
-                        console.log(err);
-                    }
                     );
+                },
+                function(err) {
+                    console.log(err);
                 }
-                //example: list of www/audio/ folder in cordova/ionic app.
-                console.log(listDir(cordova.file.applicationDirectory + "www/audio/"));
-                
-                
-                
+            );
+        }
+        //example: list of www/audio/ folder in cordova/ionic app.
+        console.log(listDir(cordova.file.applicationDirectory + "www/audio/"));
+
         // Play audio
         //
-        function playAudio(url) {
-            // Play the audio file at url
-            var my_media = new Media(
-                url,
-                // success callback
-                function() {
-                    console.log("playAudio():Audio Success");
-                },
-                // error callback
-                function(err) {
-                    console.log("playAudio():Audio Error: " + err);
-                }
-                );
-                // Play audio
-                my_media.play();
-            }
 
-            /*         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+        /*         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
     
                 console.log('file system open: ' + fs.name);
                 fs.root.getFile("newPersistentFile.txt", { create: true, exclusive: false }, function (fileEntry) {
@@ -144,7 +146,7 @@ var app = {
             
             console.log(window.requestFileSystem(readFile()));
      */
-        }
-    };
+    }
+};
 
 app.initialize();

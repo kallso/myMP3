@@ -63,46 +63,27 @@ var app = {
         
         //console.log("playAudio" + src);
 
-        const src = "/android_asset/www/audio/" + optionItem.text + ".mp3";
+        //const src = "/android_asset/www/audio/" + optionItem.text + ".mp3";
+        const src = "/www/audio/Joe Satriani - Made of Tears.mp4";
         
         
         // EVENTS
-        playBtn.addEventListener('click', playAudio(src));
-        playBtn.addEventListener('touch', playAudio(src));
-
-        /*         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
-
-            console.log('file system open: ' + fs.name);
-            fs.root.getFile("newPersistentFile.txt", { create: true, exclusive: false }, function (fileEntry) {
+        playBtn.addEventListener('click', playTrack);
         
-                console.log("fileEntry is file?" + fileEntry.isFile.toString());
-                fileEntry.name == 'Jasmin.mp3'
-                fileEntry.fullPath == '/home/ubuntu/dev/cordova/myMP3/platforms/android/app/src/main/assets/www/audio/Jasmin.mp3'
-                writeFile(fileEntry, null);
         
-            }, onErrorCreateFile);
-        
-        }, onErrorLoadFs);
-        
-
-        function readFile(fileEntry) {
-
-            fileEntry.file(function (file) {
-                var reader = new FileReader();
-        
-                reader.onloadend = function() {
-                    console.log("Successful file read: " + this.result);
-                    displayFileData(fileEntry.fullPath + ": " + this.result);
-                };
-        
-                reader.readAsText(file);
-        
-            }, onErrorReadFile);
+        function playTrack(e) {
+            console.dir(e.target);
+            console.log(this);
+            
+            //e.target.style.background = "url(../img/pause.svg);";
+            e.target.style.border = "3px solid green;";
+            this.style.border = "2px solid yellow;";
+            //playAudio(src); 
         }
         
-        console.log(window.requestFileSystem(readFile()));
- */
-
+        
+        
+        
         function listDir(path) {
             window.resolveLocalFileSystemURL(
                 path,
@@ -115,18 +96,18 @@ var app = {
                         function(err) {
                             console.log(err);
                         }
+                        );
+                    },
+                    function(err) {
+                        console.log(err);
+                    }
                     );
-                },
-                function(err) {
-                    console.log(err);
                 }
-            );
-        }
-        //example: list of www/audio/ folder in cordova/ionic app.
-        console.log(listDir(cordova.file.applicationDirectory + "www/audio/"));
-
-
-
+                //example: list of www/audio/ folder in cordova/ionic app.
+                console.log(listDir(cordova.file.applicationDirectory + "www/audio/"));
+                
+                
+                
         // Play audio
         //
         function playAudio(url) {
@@ -141,11 +122,44 @@ var app = {
                 function(err) {
                     console.log("playAudio():Audio Error: " + err);
                 }
-            );
-            // Play audio
-            my_media.play();
+                );
+                // Play audio
+                my_media.play();
+            }
+
+            /*         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+    
+                console.log('file system open: ' + fs.name);
+                fs.root.getFile("newPersistentFile.txt", { create: true, exclusive: false }, function (fileEntry) {
+            
+                    console.log("fileEntry is file?" + fileEntry.isFile.toString());
+                    fileEntry.name == 'Jasmin.mp3'
+                    fileEntry.fullPath == '/home/ubuntu/dev/cordova/myMP3/platforms/android/app/src/main/assets/www/audio/Jasmin.mp3'
+                    writeFile(fileEntry, null);
+            
+                }, onErrorCreateFile);
+            
+            }, onErrorLoadFs);
+            
+    
+            function readFile(fileEntry) {
+    
+                fileEntry.file(function (file) {
+                    var reader = new FileReader();
+            
+                    reader.onloadend = function() {
+                        console.log("Successful file read: " + this.result);
+                        displayFileData(fileEntry.fullPath + ": " + this.result);
+                    };
+            
+                    reader.readAsText(file);
+            
+                }, onErrorReadFile);
+            }
+            
+            console.log(window.requestFileSystem(readFile()));
+     */
         }
-    }
-};
+    };
 
 app.initialize();

@@ -191,6 +191,10 @@ body {
     margin: 0 3%;
 }
 
+.playing {
+    background: url(../img/pause.svg) !important;
+}
+
 .control-container #next {
     background: url(../img/next.svg);
 }
