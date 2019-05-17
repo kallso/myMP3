@@ -43,6 +43,7 @@ var app = {
         const nextBtn = document.getElementById("next");
         const repeatBtn = document.getElementById("repeat");
         //const pauseBtn = document.getElementById('pause');
+        const volumeSlider = document.getElementById("volume-slider");
 
         // VARIABLES
         const optionItem = {
@@ -50,19 +51,23 @@ var app = {
         };
         my_media = undefined;
 
+        // STATE
+        let state = "paused";
+
         //const src = "/android_asset/www/audio/" + optionItem.text + ".mp3";
         const src = "/android_asset/www/audio/Joe Satriani - Made of Tears.mp4";
         //const src = "/www/audio/Joe Satriani - Made of Tears.mp4";
 
         // EVENTS
         playBtn.addEventListener("click", playPause);
+        volumeSlider.addEventListener("input", volumeControl);
 
         function playPause(e) {
-            console.log('my-media', my_media);
-            
-            if (!my_media) { 
-                my_media = createMedia(src); 
-            };
+            console.log("my-media", my_media);
+
+            if (!my_media) {
+                my_media = createMedia(src);
+            }
 
             if (!this.classList.contains("playing") && my_media) {
                 my_media.play();
@@ -71,6 +76,51 @@ var app = {
                 my_media.pause();
                 this.classList.toggle("playing");
             }
+
+            /* if (state === 'paused' && my_media) {
+                my_media.play();
+                this.classList.toggle("playing");
+                state = 'playing';
+            } else if (state === 'playing' && my_media) {
+                my_media.pause();
+                this.classList.toggle("playing");
+                state = 'paused';
+            } */
+        }
+
+        function volumeControl(e) {
+            if (my_media) {
+                my_media.setVolume((e.target.value / 100).toFixed(1));
+            }
+        }
+
+
+        function playAudio(url) {
+            // Play the audio file at url
+            var my_media = new Media(
+                url,
+                // success callback
+                function() {
+                    console.log("playAudio():Audio Success");
+                },
+                // error callback
+                function(err) {
+                    console.log("playAudio():Audio Error: " + err);
+                }
+            );
+
+            // Play audio
+            my_media.play();
+
+            // Mute volume after 2 seconds
+            setTimeout(function() {
+                my_media.setVolume("0.0");
+            }, 2000);
+
+            // Set volume to 1.0 after 5 seconds
+            setTimeout(function() {
+                my_media.setVolume("1.0");
+            }, 5000);
         }
 
         function createMedia(url) {
