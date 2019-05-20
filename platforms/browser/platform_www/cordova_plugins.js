@@ -210,6 +210,22 @@ module.exports = [
         "clobbers": [
             "window.Media"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-vibration/src/browser/Vibration.js",
+        "id": "cordova-plugin-vibration.Vibration",
+        "pluginId": "cordova-plugin-vibration",
+        "merges": [
+            "navigator"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-vibration/www/vibration.js",
+        "id": "cordova-plugin-vibration.notification",
+        "pluginId": "cordova-plugin-vibration",
+        "merges": [
+            "navigator"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -218,7 +234,8 @@ module.exports.metadata =
     "cordova-plugin-whitelist": "1.3.3",
     "cordova-plugin-screen-orientation": "3.0.1",
     "cordova-plugin-file": "6.0.1",
-    "cordova-plugin-media": "5.0.2"
+    "cordova-plugin-media": "5.0.2",
+    "cordova-plugin-vibration": "3.1.0"
 }
 // BOTTOM OF METADATA
 });

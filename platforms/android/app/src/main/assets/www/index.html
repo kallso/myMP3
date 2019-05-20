@@ -30,11 +30,12 @@
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
-    <meta name="format-detection" content="telephone=no">
+        content="default-src 'self' data: gap: cdvfile://* https://ssl.gstatic.com 'unsafe-eval' 'unsafe-inline'; style-src 'self' cdvfile://* 'unsafe-inline'; media-src *; img-src 'self' cdvfile://* data: content:;">
+    <meta name="format-detection" content="telephone=no">  
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
     <link rel="stylesheet" type="text/css" href="css/index.css">
+    <script src="./js/long-press-event.js"></script>
     <title>MP3 Player Project</title>
 </head>
 
@@ -47,19 +48,21 @@
         </div>
         <div class="player-bottom">
             <div class="playlist-container">
-                Show Playlist
+                <div id="playlistBtn">Show Playlist</div>
+                <ul id="playlist" class="animateUp">
+                </ul>
             </div>
             <div class="song-info">
                 <div id="player-progress-bar-container">
-                    <progress id="song-played-progress" value="23" max="100"></progress>
+                    <input type="range" id="song-played-progress" value="0" max="0">
                 </div>
                 <div id="duree">
-                    <div class="currentTime">00:00</div>
-                    <div class="totalTime">00:00</div>
+                    <div class="currentTime" id="currentPos">00:00</div>
+                    <div class="totalTime" id="songDuration">00:00</div>
                 </div>
                 <div class="title-album-container">
-                    <div class="title">Jumpin In</div>
-                    <div class="album">Unstoppable Momentum</div>
+                    <div class="title" id="songTitle">Jumpin In</div>
+                    <div class="album" id="songAlbumArtist">Unstoppable Momentum</div>
                 </div>
             </div>
 

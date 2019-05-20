@@ -209,6 +209,7 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "es6-promise-plugin": "4.2.2",
     "cordova-plugin-screen-orientation": "3.0.1",
     "cordova-plugin-file": "6.0.1",
-    "cordova-plugin-media": "5.0.2"
+    "cordova-plugin-media": "5.0.2",
+    "cordova-plugin-vibration": "3.1.0"
   };
 });
