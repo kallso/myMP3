@@ -91,7 +91,7 @@ var app = {
                 stopCreatePlayPause(playlistArray[++index]);
             } else if (e.target.id === 'previous') {
                 if (!playlistArray[index - 1]) {
-                    index = 7;
+                    index = 7; // a changer ! mettre playlistArray.lenght
                 }
                 stopCreatePlayPause(playlistArray[--index]);
             }
