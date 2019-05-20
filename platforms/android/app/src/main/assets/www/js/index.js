@@ -307,8 +307,6 @@ var app = {
             window.src = entries[index].nativeURL;
             window.playlistArray = entries;
             
-            //let html = "";
-
             entries.forEach((song, key) => {
                 song.name = song.name.replace('.mp3','').replace('.mp4','');
                 let li = document.createElement("li");
@@ -324,8 +322,6 @@ var app = {
             songTitle.innerHTML = songInfo[0];
             songAlbumArtist.innerHTML = songInfo[1] + ' - ' + songInfo[2];
         }
-
-
 
 
         // 2EM CONTROLLER (a factoriser)!!!
