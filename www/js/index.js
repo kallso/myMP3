@@ -104,8 +104,7 @@ var app = {
                     index = playlistArray.length;
                 }
                 stopCreatePlayPause(playlistArray[--index]);
-            }
-            
+            }        
         }
 
         function repeatMusic() {
