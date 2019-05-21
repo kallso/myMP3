@@ -58,6 +58,7 @@ var app = {
         let mediaTimer = null;
         let state = "paused";
         index = 0;
+        randomIndex = 0;
         wasStoppedIntentionallyInCode = false;
         repeat = false;
         shuffle = false;
@@ -266,6 +267,7 @@ var app = {
                 function(err) {
                     console.log("playAudio():Audio Error: " + err);
                 },
+                // media_status callback
                 function(code) {
                     switch (code) {
                         case Media.MEDIA_NONE :
@@ -290,7 +292,7 @@ var app = {
                                     my_media.play();
                                 } else if (shuffle) {
                                     do {
-                                        var randomIndex = Math.round(Math.random()*playlistArray.length);
+                                        randomIndex = Math.round(Math.random()*playlistArray.length);
                                     } while (index === randomIndex);
                                     stopCreatePlayPause(playlistArray[randomIndex]);
                                     index = randomIndex;
