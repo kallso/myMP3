@@ -36,7 +36,7 @@ var app = {
 
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        // BUTTONS
+        // BUTTONS - ELEMENTS
         const playBtn = document.getElementById("play");
         const shuffleBtn = document.getElementById("shuffle");
         const previousBtn = document.getElementById("previous");
@@ -50,19 +50,26 @@ var app = {
         const playlist = document.getElementById("playlist");
         const songTitle = document.getElementById("songTitle");
         const songAlbumArtist = document.getElementById("songAlbumArtist");
+        const imgAlbum = document.getElementById("imgAlbum");
 
         
         // STATE
-        my_media = null;     // NE PAS OUBLIER DE REMETTRE 'let' DEVANT A LA FIN DU DEV
+        my_media = null;
         let mediaTimer = null;
         let state = "paused";
         index = 0;
         wasStoppedIntentionallyInCode = false;
+        repeat = false;
+        shuffle = false;
+        volume = "0.5";
 
-        // Retreiving PLAYLIST
-        listDir(cordova.file.applicationDirectory + "www/audio/");
+        // Retreiving Jackets (images)
+        listDir(cordova.file.applicationDirectory + "www/jackets/", listJackets);
+
+        // Retreiving Playlist (songs)
+        listDir(cordova.file.applicationDirectory + "www/audio/", listSongs);
+
         
-
         // EVENTS
         playBtn.addEventListener("click", playPauseStop);
         playBtn.addEventListener("long-press", playPauseStop);
@@ -71,9 +78,12 @@ var app = {
         playCursor.addEventListener("input", navigateMusic);
         nextBtn.addEventListener("click", changeMusic);
         previousBtn.addEventListener("click", changeMusic);
+        repeatBtn.addEventListener("click", repeatMusic);
+        shuffleBtn.addEventListener("click", shuffleMusic);
 
+        // CONTROLERS        
         function playCursorControl() {
-            this.style.background = "linear-gradient(to right, #fff 0%, #fff " + (this.value / this.max) * 100 + "%, #000 " + (this.value / this.max) * 100 + "%, black 100%)";
+            this.style.backgroundImage = "linear-gradient(to right, #fff 0%, #fff " + (this.value / this.max) * 100 + "%, #000 " + (this.value / this.max) * 100 + "%, black 100%)";
         }
 
         const updatePlayCursor = playCursorControl.bind(playCursor);
@@ -91,14 +101,34 @@ var app = {
                 stopCreatePlayPause(playlistArray[++index]);
             } else if (e.target.id === 'previous') {
                 if (!playlistArray[index - 1]) {
-                    index = 7; // a changer ! mettre playlistArray.lenght
+                    index = playlistArray.length;
                 }
                 stopCreatePlayPause(playlistArray[--index]);
             }
             
         }
 
-        // CONTROLERS
+        function repeatMusic() {
+            shuffle = false;
+            if (shuffle) shuffleBtn.style.backgroundImage = "url(img/shuffle-on.svg)";
+            else shuffleBtn.style.backgroundImage = "url(img/shuffle.svg)";
+
+            repeat = repeat === false ? true : false;
+            if (repeat) repeatBtn.style.backgroundImage = "url(img/repeat-on.svg)";
+            else repeatBtn.style.backgroundImage = "url(img/repeat.svg)";
+        }
+
+        function shuffleMusic() {
+            repeat = false;
+            if (repeat) repeatBtn.style.backgroundImage = "url(img/repeat-on.svg)";
+            else repeatBtn.style.backgroundImage = "url(img/repeat.svg)";
+
+            shuffle = shuffle === false ? true : false;
+            if (shuffle) shuffleBtn.style.backgroundImage = "url(img/shuffle-on.svg)";
+            else shuffleBtn.style.backgroundImage = "url(img/shuffle.svg)"; 
+        }
+
+        // Play --> Pause --> Stop CONTROLER
         function playPauseStop(e) {
             console.log("my-media", my_media);
 
@@ -144,7 +174,7 @@ var app = {
                     wasStoppedIntentionallyInCode = false;
 
 
-                    playBtn.style.background = "url(img/pause.svg)";
+                    playBtn.style.backgroundImage = "url(img/pause.svg)";
                     state = "playing";
 
                     // Update my_media position every second
@@ -173,7 +203,7 @@ var app = {
 
                 } else if (state === "playing" && my_media) {
                     my_media.pause();
-                    playBtn.style.background = "url(img/play.svg)";
+                    playBtn.style.backgroundImage = "url(img/play.svg)";
                     state = "paused";
                 }
 
@@ -193,7 +223,7 @@ var app = {
                     playCursor.value = 0;
                     playCursor.max = 0;
                     playCursor.style.background = '#000';
-                    playBtn.style.background = "url(img/play.svg)";
+                    playBtn.style.backgroundImage = "url(img/play.svg)";
                     state = "stoped";
                 }
             }
@@ -201,7 +231,8 @@ var app = {
 
         function volumeControl(e) {
             if (my_media) {
-                my_media.setVolume((e.target.value / 100).toFixed(1));
+                volume = (e.target.value / 100).toFixed(1);
+                my_media.setVolume(volume);
             }
         }
 
@@ -221,7 +252,7 @@ var app = {
                 playlist.style.height === "100%" ? "0" : "100%";
         }
 
-        // FUNCTIONS
+        // CREATE MEDIA CONTROLLER
 
         function createMedia(url) {
             // Create the media file at url
@@ -242,6 +273,7 @@ var app = {
                             break;
                         case Media.MEDIA_STARTING :
                             console.log('media_status is 1');
+                            my_media.setVolume(volume);
                             break;
                         case Media.MEDIA_RUNNING :
                             console.log('media_status is 2');
@@ -254,15 +286,26 @@ var app = {
                             console.log('media_status is 4');
                             if (wasStoppedIntentionallyInCode === false) {
                                 navigator.vibrate(100);
-                                if (!playlistArray[index + 1]) {
-                                    index = -1;
+                                if (repeat) {
+                                    my_media.play();
+                                } else if (shuffle) {
+                                    do {
+                                        var randomIndex = Math.round(Math.random()*playlistArray.length);
+                                    } while (index === randomIndex);
+                                    stopCreatePlayPause(playlistArray[randomIndex]);
+                                    index = randomIndex;
+                                } else {
+                                    if (!playlistArray[index + 1]) {
+                                        index = -1;
+                                    }
+                                    stopCreatePlayPause(playlistArray[++index]);
                                 }
-                                stopCreatePlayPause(playlistArray[++index]);                
                             }
                             break;
                     }
                 }
             );
+
             return my_media;
         }
         
@@ -284,7 +327,7 @@ var app = {
             return time;
         }
 
-        function listDir(path) {
+        function listDir(path, onSuccessCallback) {
             window.resolveLocalFileSystemURL(
                 path,
                 function(fileSystem) {
@@ -302,7 +345,7 @@ var app = {
             );
         }
 
-        function onSuccessCallback(entries){
+        function listSongs(entries) {
             console.log(entries);
             window.src = entries[index].nativeURL;
             window.playlistArray = entries;
@@ -320,11 +363,31 @@ var app = {
             
             let songInfo = entries[0].name.split('-');
             songTitle.innerHTML = songInfo[0];
-            songAlbumArtist.innerHTML = songInfo[1] + ' - ' + songInfo[2];
+            const AlbumArtist = (songInfo[1] + '-' + songInfo[2]).trim();
+            songAlbumArtist.innerHTML = AlbumArtist;
+
+            playlistArray.forEach(song => {
+                jacketsArray.forEach(jacket => {
+                    const songInfo = song.name.split('-');
+                    const AlbumArtist = (songInfo[1] + '-' + songInfo[2]).trim();
+                    
+                    if (AlbumArtist === jacket.name) song.jacketURL = jacket.nativeURL;
+                });               
+            });
+
+            imgAlbum.src = playlistArray[0].jacketURL;
+        }
+
+        function listJackets(entries) {
+            console.log(entries);
+            window.jacketsArray = entries;
+            jacketsArray.forEach(jacket => {
+                jacket.name = jacket.name.split('.')[0].trim();
+            });
         }
 
 
-        // 2EM CONTROLLER (a factoriser)!!!
+        // Stop --> Create --> Play --> Pause CONTROLER
 
         function stopCreatePlayPause(song, songIndex = index) {
 
@@ -340,7 +403,7 @@ var app = {
                 playCursor.value = 0;
                 playCursor.max = 0;
                 playCursor.style.background = '#000';
-                playBtn.style.background = "url(img/play.svg)";
+                playBtn.style.backgroundImage = "url(img/play.svg)";
                 state = "stoped";
             }
     
@@ -352,7 +415,8 @@ var app = {
                 my_media = createMedia(song.nativeURL);
                 index = songIndex;
                 songTitle.innerHTML = title;
-                songAlbumArtist.innerHTML = albumArtist;    
+                songAlbumArtist.innerHTML = albumArtist;
+                imgAlbum.src = song.jacketURL;    
     
                 // Get duration
                 let counter = 0;
@@ -373,7 +437,7 @@ var app = {
             if ((state === "paused" || state === "stoped") && my_media) {
                 my_media.play();
     
-                playBtn.style.background = "url(img/pause.svg)";
+                playBtn.style.backgroundImage = "url(img/pause.svg)";
                 state = "playing";
     
                 // Update my_media position every second
@@ -406,16 +470,6 @@ var app = {
                 state = "paused";
             }
         }
-
-
-
-
-
-
-
-
-        
-    
     }
 };
 

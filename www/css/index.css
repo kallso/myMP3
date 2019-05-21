@@ -91,7 +91,7 @@ body {
 
 .playlist-container ul {
     height: 0;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .playlist-container ul li {
@@ -99,11 +99,11 @@ body {
 }
 
 .animateDown {
-    animation: menuEffectDown .6s;
+    animation: menuEffectDown 0.6s;
 }
 
 .animateUp {
-    animation: menuEffectUp .6s;
+    animation: menuEffectUp 0.6s;
 }
 
 @keyframes menuEffectDown {
@@ -223,6 +223,8 @@ body {
 .control-container #shuffle,
 .control-container #repeat {
     opacity: 0.7;
+    padding: 2rem 0.6rem;
+    box-sizing: content-box;
 }
 
 .control-container #shuffle {
@@ -230,16 +232,23 @@ body {
     width: 1.5rem;
     margin-left: 2%;
     height: 1.7rem;
+    background-clip: content-box;
+    background-origin: content-box;
 }
 
 .control-container #previous,
 .control-container #next {
     width: 2.4rem;
     height: 2.4rem;
+    padding: 2rem;
+    box-sizing: content-box;
 }
 
 .control-container #previous {
     background: url(../img/previous.svg);
+    background-clip: content-box;
+    background-origin: content-box;
+    /* padding: 0; */
 }
 
 .control-container #play {
@@ -251,6 +260,8 @@ body {
 
 .control-container #next {
     background: url(../img/next.svg);
+    background-clip: content-box;
+    background-origin: content-box;
 }
 
 .control-container #repeat {
@@ -258,6 +269,8 @@ body {
     width: 1.8rem;
     height: 2rem;
     margin-right: 2%;
+    background-clip: content-box;
+    background-origin: content-box;
 }
 
 .volume-container {
@@ -466,5 +479,9 @@ input[type="range"]:focus::-ms-fill-upper {
 
     .album {
         padding-top: 4%;
+    }
+
+    .control-container #previous, .control-container #next {
+        padding: 2rem 1rem;
     }
 }
