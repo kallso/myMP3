@@ -465,6 +465,16 @@ input[type="range"]:focus::-ms-fill-upper {
 
     .playlist-container {
         position: static;
+        max-height: 100vh;
+        display: block;
+    }
+
+    .playlist-container ul {
+        position: absolute;
+        overflow: auto;
+        top: 4.8rem;
+        background-color: inherit;
+        max-height: calc(100vh - 4.8rem);
     }
 
     .img-container img {
