@@ -51,6 +51,8 @@ var app = {
         const songTitle = document.getElementById("songTitle");
         const songAlbumArtist = document.getElementById("songAlbumArtist");
         const imgAlbum = document.getElementById("imgAlbum");
+        const playlistBtnText = document.getElementById("playlistBtn-text");
+        const playlistBtnImg = document.getElementById("playlistBtn-img");
 
         
         // STATE
@@ -237,13 +239,15 @@ var app = {
         }
 
         function playlistControl(e) {
-            console.log(e.target);
-            e.target.innerHTML =
-                e.target.innerHTML === "Show Playlist"
+            playlistBtnText.innerHTML =
+                playlistBtnText.innerHTML === "Show Playlist"
                     ? "Hide Playlist"
                     : "Show Playlist";
-            const playlist = e.target.nextSibling.nextSibling;
-            console.log(e.target.nextSibling.nextSibling);
+
+            playlistBtnImg.src =
+                playlistBtnImg.src === "file:///android_asset/www/img/down.svg"
+                    ? "file:///android_asset/www/img/up.svg"
+                    : "file:///android_asset/www/img/down.svg";
 
             playlist.classList.toggle("animateUp");
             playlist.classList.toggle("animateDown");
@@ -354,12 +358,23 @@ var app = {
             entries.forEach((song, key) => {
                 song.name = song.name.replace('.mp3','').replace('.mp4','');
                 let li = document.createElement("li");
-                li.innerHTML = song.name;
-                li.addEventListener('click', e => { 
+                const playlistCount = document.createElement("div");
+                const playlistSongInfo = document.createElement("div");
+                const playlistDuration = document.createElement("div");
+
+                playlistCount.innerHTML = key + 1;
+                playlistSongInfo.innerHTML = song.name;
+                playlistDuration.innerHTML = "03:48";
+
+                li.appendChild(playlistCount);
+                li.appendChild(playlistSongInfo);
+                li.appendChild(playlistDuration);
+
+                li.addEventListener('click', () => {
                     stopCreatePlayPause(song, key);       
                 });
+
                 playlist.appendChild(li);
-                
             });
             
             let songInfo = entries[0].name.split('-');
