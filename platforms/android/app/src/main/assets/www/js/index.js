@@ -238,7 +238,7 @@ var app = {
             }
         }
 
-        function playlistControl(e) {
+        function playlistControl() {
             playlistBtnText.innerHTML =
                 playlistBtnText.innerHTML === "Show Playlist"
                     ? "Hide Playlist"
@@ -252,9 +252,10 @@ var app = {
             playlist.classList.toggle("animateUp");
             playlist.classList.toggle("animateDown");
 
-            playlist.style.height =
-                playlist.style.height === "100%" ? "0" : "100%";
+            playlist.style.maxHeight =
+                playlist.style.maxHeight === "calc(100vh - 4.8rem)" ? "0px" : "calc(100vh - 4.8rem)";
         }
+        
 
         // CREATE MEDIA CONTROLLER
 
@@ -371,7 +372,8 @@ var app = {
                 li.appendChild(playlistDuration);
 
                 li.addEventListener('click', () => {
-                    stopCreatePlayPause(song, key);       
+                    stopCreatePlayPause(song, key);
+                    playlistControl();       
                 });
 
                 playlist.appendChild(li);

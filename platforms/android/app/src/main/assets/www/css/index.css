@@ -104,10 +104,10 @@ body {
 }
 
 .playlist-container ul {
-    height: 0;
+    height: 100%;
     position: relative;
     overflow: auto;
-    max-height: calc(100vh - 4.8rem);
+    max-height: 0;
 }
 
 .playlist-container ul li {
@@ -129,13 +129,13 @@ body {
         max-height: 0;
     }
     to {
-        max-height: 100vh;
+        max-height: calc(100vh - 4.8rem);
     }
 }
 
 @keyframes menuEffectUp {
     from {
-        max-height: 100vh;
+        max-height: calc(100vh - 4.8rem);
     }
     to {
         max-height: 0;
