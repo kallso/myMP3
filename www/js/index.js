@@ -119,7 +119,7 @@ var app = {
             else shuffleBtn.style.backgroundImage = "url(img/shuffle.svg)";
 
             repeat = repeat === false ? true : false;
-            if (repeat) repeatBtn.style.backgroundImage = "url(img/repeat-on.svg)";
+            if (repeat) repeatBtn.style.backgroundImage = "url(img/repeat_one.svg)";
             else repeatBtn.style.backgroundImage = "url(img/repeat.svg)";
         }
 
@@ -133,17 +133,14 @@ var app = {
             else shuffleBtn.style.backgroundImage = "url(img/shuffle.svg)"; 
         }
 
-        function resetMusic(my_media) {
+        function resetMusic() {
             wasStoppedIntentionallyInCode = true;
             my_media.stop();
             my_media.release();
             clearInterval(mediaTimer);
-            //my_media = null;
             mediaTimer = null;
-            currentPos.innerHTML = "00:00";
-            songDuration.innerHTML = "00:00";
-            playCursor.value = 0;
-            playCursor.max = 0;
+            currentPos.innerHTML = songDuration.innerHTML = "00:00";
+            playCursor.value = playCursor.max = 0;
             playCursor.style.background = '#000';
             playBtn.style.backgroundImage = "url(img/play.svg)";
             state = "stoped";
@@ -270,8 +267,7 @@ var app = {
             console.log(entries);            
             window.src = entries[index].nativeURL;
             window.playlistArray = entries;
-            let songInfo = ""; 
-            let AlbumArtist = "";
+            let songInfo = []; 
             
             playlistArray.forEach((song, key) => {
                 
@@ -414,7 +410,7 @@ var app = {
                 e.preventDefault();
 
                 if (my_media) {
-                    resetMusic(my_media);
+                    resetMusic();
                 }
             }
         }
@@ -423,7 +419,7 @@ var app = {
         function stopCreatePlayPause(song, songIndex = index) {
 
             if (my_media) {
-                resetMusic(my_media);
+                resetMusic();
                 my_media = null;
             }
     
