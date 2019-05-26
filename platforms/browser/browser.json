@@ -10,9 +10,6 @@
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
-    "cordova-plugin-screen-orientation": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
     "cordova-plugin-file": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
@@ -25,14 +22,6 @@
   },
   "dependent_plugins": {},
   "modules": [
-    {
-      "file": "plugins/cordova-plugin-screen-orientation/www/screenorientation.js",
-      "id": "cordova-plugin-screen-orientation.screenorientation",
-      "pluginId": "cordova-plugin-screen-orientation",
-      "clobbers": [
-        "cordova.plugins.screenorientation"
-      ]
-    },
     {
       "file": "plugins/cordova-plugin-file/www/DirectoryEntry.js",
       "id": "cordova-plugin-file.DirectoryEntry",
@@ -255,7 +244,6 @@
   ],
   "plugin_metadata": {
     "cordova-plugin-whitelist": "1.3.3",
-    "cordova-plugin-screen-orientation": "3.0.1",
     "cordova-plugin-file": "6.0.1",
     "cordova-plugin-media": "5.0.2",
     "cordova-plugin-vibration": "3.1.0"

@@ -51,6 +51,8 @@ var app = {
         const songTitle = document.getElementById("songTitle");
         const songAlbumArtist = document.getElementById("songAlbumArtist");
         const imgAlbum = document.getElementById("imgAlbum");
+        const playlistBtnText = document.getElementById("playlistBtn-text");
+        const playlistBtnImg = document.getElementById("playlistBtn-img");
 
         
         // STATE
@@ -58,6 +60,7 @@ var app = {
         let mediaTimer = null;
         let state = "paused";
         index = 0;
+        randomIndex = 0;
         wasStoppedIntentionallyInCode = false;
         repeat = false;
         shuffle = false;
@@ -81,7 +84,10 @@ var app = {
         repeatBtn.addEventListener("click", repeatMusic);
         shuffleBtn.addEventListener("click", shuffleMusic);
 
-        // CONTROLERS        
+        /**
+        * FUNCTIONS
+        **/
+
         function playCursorControl() {
             this.style.backgroundImage = "linear-gradient(to right, #fff 0%, #fff " + (this.value / this.max) * 100 + "%, #000 " + (this.value / this.max) * 100 + "%, black 100%)";
         }
@@ -104,8 +110,7 @@ var app = {
                     index = playlistArray.length;
                 }
                 stopCreatePlayPause(playlistArray[--index]);
-            }
-            
+            }        
         }
 
         function repeatMusic() {
@@ -114,7 +119,7 @@ var app = {
             else shuffleBtn.style.backgroundImage = "url(img/shuffle.svg)";
 
             repeat = repeat === false ? true : false;
-            if (repeat) repeatBtn.style.backgroundImage = "url(img/repeat-on.svg)";
+            if (repeat) repeatBtn.style.backgroundImage = "url(img/repeat_one.svg)";
             else repeatBtn.style.backgroundImage = "url(img/repeat.svg)";
         }
 
@@ -128,7 +133,200 @@ var app = {
             else shuffleBtn.style.backgroundImage = "url(img/shuffle.svg)"; 
         }
 
-        // Play --> Pause --> Stop CONTROLER
+        function resetMusic() {
+            wasStoppedIntentionallyInCode = true;
+            my_media.stop();
+            my_media.release();
+            clearInterval(mediaTimer);
+            mediaTimer = null;
+            currentPos.innerHTML = songDuration.innerHTML = "00:00";
+            playCursor.value = playCursor.max = 0;
+            playCursor.style.background = '#000';
+            playBtn.style.backgroundImage = "url(img/play.svg)";
+            state = "stoped";
+        }
+
+        function volumeControl(e) {
+            if (my_media) {
+                volume = (e.target.value / 100).toFixed(1);
+                my_media.setVolume(volume);
+            }
+        }
+
+        function playlistControl() {
+            playlistBtnText.innerHTML =
+                playlistBtnText.innerHTML === "Show Playlist"
+                    ? "Hide Playlist"
+                    : "Show Playlist";
+
+            playlistBtnImg.src =
+                playlistBtnImg.src === "file:///android_asset/www/img/down.svg"
+                    ? "file:///android_asset/www/img/up.svg"
+                    : "file:///android_asset/www/img/down.svg";
+
+            playlist.classList.toggle("animateUp");
+            playlist.classList.toggle("animateDown");
+
+            playlist.style.maxHeight =
+                playlist.style.maxHeight === "calc(100vh - 4.8rem)" ? "0px" : "calc(100vh - 4.8rem)";
+        }
+
+        function createMedia(url) {
+            // Create the media file at url
+            let my_media = new Media(
+                url,
+                // success callback
+                function() {
+                    console.log("playAudio():Audio Success");
+                },
+                // error callback
+                function(err) {
+                    console.log("playAudio():Audio Error: " + err);
+                },
+                // media_status callback
+                function(code) {
+                    switch (code) {
+                        case Media.MEDIA_NONE :
+                            console.log('media_status is NONE (0)');
+                            break;
+                        case Media.MEDIA_STARTING :
+                            console.log('media_status is STARTING (1)');
+                            my_media.setVolume(volume);
+                            break;
+                        case Media.MEDIA_RUNNING :
+                            console.log('media_status is RUNNING (2)');
+                            wasStoppedIntentionallyInCode = false;
+                            break;
+                        case Media.MEDIA_PAUSED :
+                            console.log('media_status is PAUSED (3)');
+                            break;
+                        case Media.MEDIA_STOPPED :
+                            console.log('media_status is STOPPED (4)');
+                            if (wasStoppedIntentionallyInCode === false) {
+                                navigator.vibrate(100);
+                                if (repeat) {
+                                    my_media.play();
+                                } else if (shuffle) {
+                                    do {
+                                        randomIndex = Math.round(Math.random()*playlistArray.length);
+                                    } while (index === randomIndex);
+                                    stopCreatePlayPause(playlistArray[randomIndex]);
+                                    index = randomIndex;
+                                } else {
+                                    if (!playlistArray[index + 1]) {
+                                        index = -1;
+                                    }
+                                    stopCreatePlayPause(playlistArray[++index]);
+                                }
+                            }
+                            break;
+                    }
+                }
+            );
+
+            return my_media;
+        }
+        
+        // assumes num is a whole number
+        function pad2Digits(num) {
+            var str = num.toString();
+            if (str.length === 1) {
+            str = '0' + str;
+            }
+            return str;
+        }
+
+        function secondsToMinutes(sec) {
+            const minutes = Math.floor(sec / 60);
+            const seconds = Math.round(sec) % 60;
+            
+            const time = pad2Digits(minutes) + ':' + pad2Digits(seconds);
+
+            return time;
+        }
+
+        function listDir(path, onSuccessCallback) {
+            window.resolveLocalFileSystemURL(
+                path,
+                function(fileSystem) {
+                    var reader = fileSystem.createReader();
+                    reader.readEntries(
+                        onSuccessCallback,
+                        function(err) {
+                            console.log(err);
+                        }
+                    );
+                },
+                function(err) {
+                    console.log(err);
+                }
+            );
+        }
+
+        function listSongs(entries) {
+            console.log(entries);            
+            window.src = entries[index].nativeURL;
+            window.playlistArray = entries;
+            let songInfo = []; 
+            
+            playlistArray.forEach((song, key) => {
+                
+                songInfo = song.name.replace('.mp3','').replace('.mp4','').split('-');
+                song.name = songInfo[0].trim();
+                song.albumArtist = (songInfo[1] + '-' + songInfo[2]).trim();
+            
+                jacketsArray.forEach(jacket => {                   
+                    if (song.albumArtist === jacket.name) song.jacketURL = jacket.nativeURL;
+                });
+                
+                if (key === 0) {
+                    songTitle.innerHTML = song.name;
+                    songAlbumArtist.innerHTML = song.albumArtist;
+                    imgAlbum.src = song.jacketURL;
+                }
+
+                let li = document.createElement("li");
+                const playlistJacket = document.createElement("img");
+                const playlistSongInfoContainer = document.createElement("div");
+                const playlistTitle = document.createElement("div");
+                const playlistAlbumArtist = document.createElement("div");
+
+                playlistSongInfoContainer.classList.add("playlistSongInfoContainer");
+                playlistTitle.classList.add("playlistTitle");
+                playlistAlbumArtist.classList.add("playlistAlbumArtist");
+
+                playlistJacket.src = song.jacketURL;
+                playlistTitle.innerHTML = song.name;
+                playlistAlbumArtist.innerHTML = song.albumArtist;
+
+                li.appendChild(playlistJacket);
+                li.appendChild(playlistSongInfoContainer);
+                
+                playlistSongInfoContainer.appendChild(playlistTitle);
+                playlistSongInfoContainer.appendChild(playlistAlbumArtist);
+
+                li.addEventListener('click', () => {
+                    stopCreatePlayPause(song, key);
+                    playlistControl();       
+                });
+
+                playlist.appendChild(li);
+            });
+        }
+
+        function listJackets(entries) {
+            console.log(entries);
+            window.jacketsArray = entries;
+            jacketsArray.forEach(jacket => {
+                jacket.name = jacket.name.split('.')[0].trim();
+            });
+        }
+
+        /**
+        * CONTROLERS 
+        **/
+
+        // Play --> Pause --> Stop CONTROLER     
         function playPauseStop(e) {
             console.log("my-media", my_media);
 
@@ -212,210 +410,25 @@ var app = {
                 e.preventDefault();
 
                 if (my_media) {
-                    wasStoppedIntentionallyInCode = true;
-                    my_media.stop();
-                    my_media.release();
-                    clearInterval(mediaTimer);
-                    //my_media = null;
-                    mediaTimer = null;
-                    currentPos.innerHTML = "00:00";
-                    songDuration.innerHTML = "00:00";
-                    playCursor.value = 0;
-                    playCursor.max = 0;
-                    playCursor.style.background = '#000';
-                    playBtn.style.backgroundImage = "url(img/play.svg)";
-                    state = "stoped";
+                    resetMusic();
                 }
             }
         }
-
-        function volumeControl(e) {
-            if (my_media) {
-                volume = (e.target.value / 100).toFixed(1);
-                my_media.setVolume(volume);
-            }
-        }
-
-        function playlistControl(e) {
-            console.log(e.target);
-            e.target.innerHTML =
-                e.target.innerHTML === "Show Playlist"
-                    ? "Hide Playlist"
-                    : "Show Playlist";
-            const playlist = e.target.nextSibling.nextSibling;
-            console.log(e.target.nextSibling.nextSibling);
-
-            playlist.classList.toggle("animateUp");
-            playlist.classList.toggle("animateDown");
-
-            playlist.style.height =
-                playlist.style.height === "100%" ? "0" : "100%";
-        }
-
-        // CREATE MEDIA CONTROLLER
-
-        function createMedia(url) {
-            // Create the media file at url
-            let my_media = new Media(
-                url,
-                // success callback
-                function() {
-                    console.log("playAudio():Audio Success");
-                },
-                // error callback
-                function(err) {
-                    console.log("playAudio():Audio Error: " + err);
-                },
-                function(code) {
-                    switch (code) {
-                        case Media.MEDIA_NONE :
-                            console.log('media_status is 0');
-                            break;
-                        case Media.MEDIA_STARTING :
-                            console.log('media_status is 1');
-                            my_media.setVolume(volume);
-                            break;
-                        case Media.MEDIA_RUNNING :
-                            console.log('media_status is 2');
-                            wasStoppedIntentionallyInCode = false;
-                            break;
-                        case Media.MEDIA_PAUSED :
-                            console.log('media_status is 3');
-                            break;
-                        case Media.MEDIA_STOPPED :
-                            console.log('media_status is 4');
-                            if (wasStoppedIntentionallyInCode === false) {
-                                navigator.vibrate(100);
-                                if (repeat) {
-                                    my_media.play();
-                                } else if (shuffle) {
-                                    do {
-                                        var randomIndex = Math.round(Math.random()*playlistArray.length);
-                                    } while (index === randomIndex);
-                                    stopCreatePlayPause(playlistArray[randomIndex]);
-                                    index = randomIndex;
-                                } else {
-                                    if (!playlistArray[index + 1]) {
-                                        index = -1;
-                                    }
-                                    stopCreatePlayPause(playlistArray[++index]);
-                                }
-                            }
-                            break;
-                    }
-                }
-            );
-
-            return my_media;
-        }
-        
-        // assumes num is a whole number
-        function pad2Digits(num) {
-            var str = num.toString();
-            if (str.length === 1) {
-            str = '0' + str;
-            }
-            return str;
-        }
-
-        function secondsToMinutes(sec) {
-            const minutes = Math.floor(sec / 60);
-            const seconds = Math.round(sec) % 60;
-            
-            const time = pad2Digits(minutes) + ':' + pad2Digits(seconds);
-
-            return time;
-        }
-
-        function listDir(path, onSuccessCallback) {
-            window.resolveLocalFileSystemURL(
-                path,
-                function(fileSystem) {
-                    var reader = fileSystem.createReader();
-                    reader.readEntries(
-                        onSuccessCallback,
-                        function(err) {
-                            console.log(err);
-                        }
-                    );
-                },
-                function(err) {
-                    console.log(err);
-                }
-            );
-        }
-
-        function listSongs(entries) {
-            console.log(entries);
-            window.src = entries[index].nativeURL;
-            window.playlistArray = entries;
-            
-            entries.forEach((song, key) => {
-                song.name = song.name.replace('.mp3','').replace('.mp4','');
-                let li = document.createElement("li");
-                li.innerHTML = song.name;
-                li.addEventListener('click', e => { 
-                    stopCreatePlayPause(song, key);       
-                });
-                playlist.appendChild(li);
-                
-            });
-            
-            let songInfo = entries[0].name.split('-');
-            songTitle.innerHTML = songInfo[0];
-            const AlbumArtist = (songInfo[1] + '-' + songInfo[2]).trim();
-            songAlbumArtist.innerHTML = AlbumArtist;
-
-            playlistArray.forEach(song => {
-                jacketsArray.forEach(jacket => {
-                    const songInfo = song.name.split('-');
-                    const AlbumArtist = (songInfo[1] + '-' + songInfo[2]).trim();
-                    
-                    if (AlbumArtist === jacket.name) song.jacketURL = jacket.nativeURL;
-                });               
-            });
-
-            imgAlbum.src = playlistArray[0].jacketURL;
-        }
-
-        function listJackets(entries) {
-            console.log(entries);
-            window.jacketsArray = entries;
-            jacketsArray.forEach(jacket => {
-                jacket.name = jacket.name.split('.')[0].trim();
-            });
-        }
-
 
         // Stop --> Create --> Play --> Pause CONTROLER
-
         function stopCreatePlayPause(song, songIndex = index) {
 
             if (my_media) {
-                wasStoppedIntentionallyInCode = true;
-                my_media.stop();
-                my_media.release();
-                clearInterval(mediaTimer);
+                resetMusic();
                 my_media = null;
-                mediaTimer = null;
-                currentPos.innerHTML = "00:00";
-                songDuration.innerHTML = "00:00";
-                playCursor.value = 0;
-                playCursor.max = 0;
-                playCursor.style.background = '#000';
-                playBtn.style.backgroundImage = "url(img/play.svg)";
-                state = "stoped";
             }
     
             if (!my_media) {
     
-                const songInfo = song.name.split('-');
-                const title = songInfo[0];
-                const albumArtist = songInfo[1] + ' - ' + songInfo[2];
                 my_media = createMedia(song.nativeURL);
                 index = songIndex;
-                songTitle.innerHTML = title;
-                songAlbumArtist.innerHTML = albumArtist;
+                songTitle.innerHTML = song.name;
+                songAlbumArtist.innerHTML = song.albumArtist;
                 imgAlbum.src = song.jacketURL;    
     
                 // Get duration

@@ -64,6 +64,8 @@ body {
 }
 
 .player-top {
+    /* height: 66%; */
+    display: flex;
 }
 
 .playlist-container {
@@ -83,10 +85,10 @@ body {
 
 #playlistBtn {
     width: 100%;
-    height: 4.8rem;
     display: flex;
     justify-content: space-around;
     align-items: center;
+    padding: 3.52% 0;
 }
 
 #playlistBtn-img {
@@ -163,20 +165,25 @@ body {
 }
 
 .img-container {
-    height: 34.8rem;
+    /* height: 34.8rem; */
     width: 100%;
+    margin-top: 11.65%;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* flex-shrink: 0; */
 }
 
 .img-container img {
     display: block;
     max-width: 100%;
     object-fit: contain;
-    margin-top: 4.8rem;
 }
 
 .player-bottom {
     display: flex;
     flex-direction: column;
+    flex-shrink: 0;
+    /* height: 26%; */
 }
 
 ::-webkit-progress-bar {
@@ -193,10 +200,11 @@ body {
 .song-info {
     background-color: #000;
     color: #fff;
-    width: 100vw;
-    height: 7.4rem;
+    /* height: 7.4rem; */
     display: flex;
     flex-direction: column;
+    width: 100vw;
+    height: 100%;
 }
 
 #song-played-progress {
@@ -223,9 +231,10 @@ body {
 #duree {
     display: flex;
     justify-content: space-between;
-    padding: 0.4rem 1.2rem 0rem 1.2rem;
+    padding: 0.97% 2.91% 0 2.91%;
     font-size: 1.4rem;
     background-color: #000;
+    /* flex: 0 0; */
 }
 
 .title,
@@ -236,21 +245,24 @@ body {
 
 .album {
     color: #625c5c;
-    padding: 0.3rem 1rem 1rem 1rem;
+    padding: 0.73% 2.43% 2.43% 2.43%;
     font-size: 1.4rem;
     background-color: #000;
 }
 
 .player-control {
     background-color: #192029;
-    padding: 0 2.5rem;
-    height: 14.7rem;
+    padding: 0 6.07%;
+    /* height: 14.7rem; */
+    display: flex;
+    flex-direction: column;
+    /* flex-shrink: 0; */
 }
 
 .control-container {
     display: flex;
     justify-content: space-between;
-    padding: 2.4rem 0;
+    padding: 6.63% 0;
 }
 
 .control-container div {
@@ -261,7 +273,7 @@ body {
 .control-container #shuffle,
 .control-container #repeat {
     opacity: 0.7;
-    padding: 2rem 0.6rem;
+    padding: 5.53% 1.66%;
     box-sizing: content-box;
 }
 
@@ -278,7 +290,7 @@ body {
 .control-container #next {
     width: 2.4rem;
     height: 2.4rem;
-    padding: 2rem;
+    padding: 5.53%;
     box-sizing: content-box;
 }
 
@@ -315,6 +327,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding-bottom: 2.2%;
 }
 
 .volume-container img {
@@ -514,8 +527,11 @@ input[type="range"]:focus::-ms-fill-upper {
         width: unset;
     }
 
-    .img-container img {
+    .img-container {
         margin-top: 0;
+    }
+
+    .img-container img {
         height: 100%;
     }
 
