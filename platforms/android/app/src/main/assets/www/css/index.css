@@ -81,6 +81,7 @@ body {
     position: absolute;
     max-height: 100vh;
     top: 0;
+    height: 7.2vh;
 }
 
 #playlistBtn {
@@ -88,7 +89,7 @@ body {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 3.52% 0;
+    height: 100%;
 }
 
 #playlistBtn-img {
@@ -123,13 +124,13 @@ body {
 }
 
 .playlist-container ul li img {
-    margin-left: 2.4rem;
+    margin-left: 7.5%;
     height: 4.8rem;
     width: 4.8rem;
 }
 
 .playlistSongInfoContainer {
-    margin-left: 1.5rem;
+    margin-left: 4.688%;
 }
 
 .playlistTitle {
@@ -169,16 +170,18 @@ body {
 
 .img-container {
     width: 100vw;
-    margin-top: 13.05%;
+    margin-top: 7.2vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    max-height: 100%;
 }
 
 .img-container img {
     display: block;
     max-width: 100%;
     object-fit: scale-down;
+    max-height: 100%;
 }
 
 .player-bottom {
@@ -323,7 +326,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-bottom: 3.4%;
+    padding-bottom: 4.1%;
 }
 
 .volume-container img {
@@ -363,20 +366,16 @@ input[type="range"]::-ms-track {
 /* Special styling for WebKit/Blink */
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    /* border: 1px solid #000000; */
     height: 1.8rem;
     width: 1.8rem;
     border-radius: 50%;
     background: #ffffff;
     cursor: pointer;
     margin-top: -0.8rem; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
-    /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */ /* Add cool effects to your sliders! */
 }
 
 /* All the same stuff for Firefox */
 input[type="range"]::-moz-range-thumb {
-    /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
-    /* border: 1px solid #000000; */
     height: 1.8rem;
     width: 1.8rem;
     border-radius: 50%;
@@ -386,8 +385,6 @@ input[type="range"]::-moz-range-thumb {
 
 /* All the same stuff for IE */
 input[type="range"]::-ms-thumb {
-    /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
-    /* border: 1px solid #000000; */
     height: 1.8rem;
     width: 1.8rem;
     border-radius: 50%;
@@ -401,7 +398,6 @@ input[type="range"]::-webkit-slider-runnable-track {
     width: 100%;
     height: 2px;
     cursor: pointer;
-    /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
     background: #fff;
 }
 
@@ -413,7 +409,6 @@ input[type="range"]::-moz-range-track {
     width: 100%;
     height: 2px;
     cursor: pointer;
-    /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
     background: #fff;
 }
 
@@ -427,16 +422,12 @@ input[type="range"]::-ms-track {
 }
 input[type="range"]::-ms-fill-lower {
     background: #fff;
-    /* border-radius: 2.6px; */
-    /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
 }
 input[type="range"]:focus::-ms-fill-lower {
     background: #fff;
 }
 input[type="range"]::-ms-fill-upper {
     background: #fff;
-    /* border-radius: 2.6px; */
-    /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
 }
 input[type="range"]:focus::-ms-fill-upper {
     background: #fff;
@@ -512,14 +503,13 @@ input[type="range"]:focus::-ms-fill-upper {
     .playlist-container {
         position: static;
         display: block;
+        height: 13vh;
     }
 
     .playlist-container ul {
-        height: calc(100vh - 12.3%);
-        position: absolute;
-        top: 12.4%;
-        background-color: inherit;
-        width: unset;
+        height: 87vh;
+        position: relative;
+        top: unset;
     }
 
     .img-container {

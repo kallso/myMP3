@@ -168,7 +168,7 @@ var app = {
             playlist.classList.toggle("animateDown");
 
             playlist.style.maxHeight =
-                playlist.style.maxHeight === "calc(100vh - 4.8rem)" ? "0px" : "calc(100vh - 4.8rem)";
+                playlist.style.maxHeight === "calc(100vh - 12.3%)" ? "0px" : "calc(100vh - 12.3%)";
         }
 
         function createMedia(url) {
