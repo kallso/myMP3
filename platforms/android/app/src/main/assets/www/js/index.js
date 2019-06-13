@@ -57,12 +57,12 @@ var app = {
         
         // STATE
         my_media = null;
-        let mediaTimer = null;
-        let state = "paused";
+        /* let */ mediaTimer = null;
+        /* let */ state = "paused";
         index = 0;
         randomIndex = 0;
         wasStoppedIntentionallyInCode = false;
-        repeat = false;
+        repeat = "";
         shuffle = false;
         volume = "0.5";
 
@@ -114,20 +114,23 @@ var app = {
         }
 
         function repeatMusic() {
-            shuffle = false;
-            if (shuffle) shuffleBtn.style.backgroundImage = "url(img/shuffle-on.svg)";
-            else shuffleBtn.style.backgroundImage = "url(img/shuffle.svg)";
-
-            repeat = repeat === false ? true : false;
-            if (repeat) repeatBtn.style.backgroundImage = "url(img/repeat_one.svg)";
-            else repeatBtn.style.backgroundImage = "url(img/repeat.svg)";
+            switch (repeat) {
+                case "":
+                    repeat = "repeatOne";
+                    repeatBtn.style.backgroundImage = "url(img/repeat_one.svg)";
+                    break;
+                case "repeatOne":
+                    repeat = "repeatAll";
+                    repeatBtn.style.backgroundImage = "url(img/repeat-on.svg)";
+                    break;
+                case "repeatAll":
+                    repeat = "";
+                    repeatBtn.style.backgroundImage = "url(img/repeat.svg)";
+                    break;
+            }
         }
 
         function shuffleMusic() {
-            repeat = false;
-            if (repeat) repeatBtn.style.backgroundImage = "url(img/repeat-on.svg)";
-            else repeatBtn.style.backgroundImage = "url(img/repeat.svg)";
-
             shuffle = shuffle === false ? true : false;
             if (shuffle) shuffleBtn.style.backgroundImage = "url(img/shuffle-on.svg)";
             else shuffleBtn.style.backgroundImage = "url(img/shuffle.svg)"; 
@@ -175,13 +178,45 @@ var app = {
             // Create the media file at url
             let my_media = new Media(
                 url,
-                // success callback
+                // success callback (Triggers when the song finished playing) (automatic my_media.stop() before)
                 function() {
-                    console.log("playAudio():Audio Success");
+                    console.log("playAudio():Audio Success. SONG FINISHED!");
+                    if (wasStoppedIntentionallyInCode === false) {
+                        navigator.vibrate(100);
+                        if (repeat === "repeatOne") {
+                            my_media.play();
+                        } else if (shuffle) {
+                            do {
+                                randomIndex = Math.round(Math.random()*playlistArray.length);
+                            } while (index === randomIndex);
+                            stopCreatePlayPause(playlistArray[randomIndex]);
+                            index = randomIndex;
+                        } else {
+                            // If its the end of the playlist
+                            if (!playlistArray[index + 1]) {
+                                if (repeat === "repeatAll") {
+                                    index = 0;
+                                    stopCreatePlayPause(playlistArray[index]);
+                                }
+                                else {
+                                    my_media.release();
+                                    clearInterval(mediaTimer);
+                                    mediaTimer = null;
+                                    currentPos.innerHTML = songDuration.innerHTML = "00:00";
+                                    playCursor.value = playCursor.max = 0;
+                                    playCursor.style.background = '#000';
+                                    playBtn.style.backgroundImage = "url(img/play.svg)";
+                                    state = "stoped";
+                                }
+                            } else {
+                                stopCreatePlayPause(playlistArray[++index]);
+                            }
+                        }
+                    }
                 },
                 // error callback
                 function(err) {
-                    console.log("playAudio():Audio Error: " + err);
+                    console.log("error playing sound: " + JSON.stringify(err));
                 },
                 // media_status callback
                 function(code) {
@@ -202,23 +237,6 @@ var app = {
                             break;
                         case Media.MEDIA_STOPPED :
                             console.log('media_status is STOPPED (4)');
-                            if (wasStoppedIntentionallyInCode === false) {
-                                navigator.vibrate(100);
-                                if (repeat) {
-                                    my_media.play();
-                                } else if (shuffle) {
-                                    do {
-                                        randomIndex = Math.round(Math.random()*playlistArray.length);
-                                    } while (index === randomIndex);
-                                    stopCreatePlayPause(playlistArray[randomIndex]);
-                                    index = randomIndex;
-                                } else {
-                                    if (!playlistArray[index + 1]) {
-                                        index = -1;
-                                    }
-                                    stopCreatePlayPause(playlistArray[++index]);
-                                }
-                            }
                             break;
                     }
                 }

@@ -496,8 +496,13 @@ input[type="range"]:focus::-ms-fill-upper {
         order: 2;
     }
 
+    #song-played-progress {
+        height: 0.3rem;
+    }
+
     #duree {
         order: 3;
+        padding: 2.97% 3.91% 1.97% 3.91%;
     }
 
     .playlist-container {
